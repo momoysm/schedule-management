@@ -40,8 +40,8 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/deleteSchedule")
-    public Long deleteSchedule(@RequestParam Long scheduleId) {
-        return scheduleService.deleteSchedule(scheduleId);
+    public Long deleteSchedule(@RequestParam Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return scheduleService.deleteSchedule(scheduleId, scheduleRequestDto);
     }
 
 }

@@ -50,16 +50,20 @@ public class ScheduleService {
 
         Schedule schedule = findScheduleById(scheduleId);
 
-        schedule.update(scheduleRequestDto);
+        if(scheduleRequestDto.getPassword().equals(schedule.getPassword())){
+            schedule.update(scheduleRequestDto);
+        }
 
         return scheduleId;
     }
 
-    public Long deleteSchedule(Long scheduleId) {
+    public Long deleteSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto) {
 
         Schedule schedule = findScheduleById(scheduleId);
 
-        scheduleRepository.delete(schedule);
+        if(scheduleRequestDto.getPassword().equals(schedule.getPassword())){
+            scheduleRepository.delete(schedule);
+        }
 
         return scheduleId;
     }
