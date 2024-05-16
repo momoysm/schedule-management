@@ -6,6 +6,7 @@ import com.sparta.schedulemanagement.entity.Schedule;
 import com.sparta.schedulemanagement.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ScheduleService {
 
     public ScheduleResponseDto getSchedule(Long scheduleId) {
 
-        Schedule schedule = scheduleRepository.findById(scheduleId).get();
+        Schedule schedule = findScheduleById(scheduleId);
 
         ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
 
@@ -40,6 +41,30 @@ public class ScheduleService {
     }
 
     public List<ScheduleResponseDto> getAllSchedule() {
+
         return scheduleRepository.findAllByOrderByCreatedAtDesc().stream().map(ScheduleResponseDto::new).toList();
+    }
+
+    @Transactional
+    public Long updateSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto) {
+
+        Schedule schedule = findScheduleById(scheduleId);
+
+        schedule.update(scheduleRequestDto);
+
+        return scheduleId;
+    }
+
+    public Long deleteSchedule(Long scheduleId) {
+
+        Schedule schedule = findScheduleById(scheduleId);
+
+        scheduleRepository.delete(schedule);
+
+        return scheduleId;
+    }
+
+    public Schedule findScheduleById(Long scheduleId){
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("찾으시는 일정은 존재하지 않습니다."));
     }
 }
