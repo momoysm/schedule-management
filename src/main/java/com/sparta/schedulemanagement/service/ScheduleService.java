@@ -51,11 +51,13 @@ public class ScheduleService {
 
         Schedule schedule = findScheduleById(scheduleId);
 
-        if(scheduleRequestDto.getPassword().equals(schedule.getPassword())){
+        if(scheduleRequestDto.getPassword().equals(schedule.getPassword())) {
             schedule.update(scheduleRequestDto);
-        }
 
-        return scheduleId;
+            return scheduleId;
+        }else{
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
     }
 
     public Long deleteSchedule(SchedulePasswordRequestDto schedulePasswordRequestDto) {
@@ -64,9 +66,12 @@ public class ScheduleService {
 
         if(schedulePasswordRequestDto.getPassword().equals(schedule.getPassword())){
             scheduleRepository.delete(schedule);
+
+            return schedulePasswordRequestDto.getScheduleId();
+        }else{
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        return schedulePasswordRequestDto.getScheduleId();
     }
 
     public Schedule findScheduleById(Long scheduleId){
