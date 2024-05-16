@@ -4,6 +4,7 @@
 사용 기술 및 개발 환경 : JAVA, Spring Boot, Gradle, MySQL, IntelliJ
 
 2.Usecase Diagram
+
 ![스크린샷 2024-05-16 오후 8 58 59](https://github.com/momoysm/schedule-management/assets/90163578/b0729b79-4cf6-4b33-85a1-611d36e8428c)
 
  - 일정 등록
@@ -14,9 +15,11 @@
 
 
 3.ERD Diagram
+
 ![schedule-management](https://github.com/momoysm/schedule-management/assets/90163578/e1dc9431-0c02-4e8a-8553-073200466e6a)
 
 4.API 명세서
+
 https://documenter.getpostman.com/view/34877953/2sA3JRZzK2
 
 5.프로젝트를 진행하며 고민한 Technical Issue
