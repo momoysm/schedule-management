@@ -1,5 +1,6 @@
 package com.sparta.schedulemanagement.service;
 
+import com.sparta.schedulemanagement.dto.SchedulePasswordRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.entity.Schedule;
@@ -57,15 +58,15 @@ public class ScheduleService {
         return scheduleId;
     }
 
-    public Long deleteSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto) {
+    public Long deleteSchedule(SchedulePasswordRequestDto schedulePasswordRequestDto) {
 
-        Schedule schedule = findScheduleById(scheduleId);
+        Schedule schedule = findScheduleById(schedulePasswordRequestDto.getScheduleId());
 
-        if(scheduleRequestDto.getPassword().equals(schedule.getPassword())){
+        if(schedulePasswordRequestDto.getPassword().equals(schedule.getPassword())){
             scheduleRepository.delete(schedule);
         }
 
-        return scheduleId;
+        return schedulePasswordRequestDto.getScheduleId();
     }
 
     public Schedule findScheduleById(Long scheduleId){

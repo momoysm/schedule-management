@@ -1,5 +1,6 @@
 package com.sparta.schedulemanagement.controller;
 
+import com.sparta.schedulemanagement.dto.SchedulePasswordRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.service.ScheduleService;
@@ -40,8 +41,8 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/deleteSchedule")
-    public Long deleteSchedule(@RequestParam Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.deleteSchedule(scheduleId, scheduleRequestDto);
+    public Long deleteSchedule(@RequestBody SchedulePasswordRequestDto schedulePasswordRequestDto) {
+        return scheduleService.deleteSchedule(schedulePasswordRequestDto);
     }
 
 }
