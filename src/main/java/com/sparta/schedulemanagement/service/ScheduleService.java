@@ -7,6 +7,8 @@ import com.sparta.schedulemanagement.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ScheduleService {
 
@@ -35,5 +37,9 @@ public class ScheduleService {
         ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
 
         return scheduleResponseDto;
+    }
+
+    public List<ScheduleResponseDto> getAllSchedule() {
+        return scheduleRepository.findAllByOrderByCreatedAtDesc().stream().map(ScheduleResponseDto::new).toList();
     }
 }

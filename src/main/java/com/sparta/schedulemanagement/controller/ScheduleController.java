@@ -6,6 +6,8 @@ import com.sparta.schedulemanagement.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
@@ -24,8 +26,12 @@ public class ScheduleController {
 
     @GetMapping("/getSchedule")
     public ScheduleResponseDto getSchedule(@RequestParam Long scheduleId) {
-        System.out.println(scheduleId);
         return scheduleService.getSchedule(scheduleId);
+    }
+
+    @GetMapping("/getAllSchedule")
+    public List<ScheduleResponseDto> getAllSchedule() {
+        return scheduleService.getAllSchedule();
     }
 
 }
