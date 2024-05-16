@@ -17,16 +17,16 @@ public class Schedule extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;
 
-    @Column
+    @Column(name="scheduleTitle", nullable = false)
     private String scheduleTitle;
 
-    @Column
+    @Column(name = "scheduleContent")
     private String scheduleContent;
 
-    @Column
+    @Column(name="scheduleManager", nullable = false)
     private String scheduleManager;
 
-    @Column
+    @Column(name="password", nullable = false)
     private String password;
 
     public Schedule(ScheduleRequestDto scheduleRequestDto){
