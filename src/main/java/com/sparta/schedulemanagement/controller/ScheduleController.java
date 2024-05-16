@@ -4,10 +4,7 @@ import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/schedule")
@@ -23,6 +20,12 @@ public class ScheduleController {
     @PostMapping("/createSchedule")
     public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
         return scheduleService.createSchedule(scheduleRequestDto);
+    }
+
+    @GetMapping("/getSchedule")
+    public ScheduleResponseDto getSchedule(@RequestParam Long scheduleId) {
+        System.out.println(scheduleId);
+        return scheduleService.getSchedule(scheduleId);
     }
 
 }

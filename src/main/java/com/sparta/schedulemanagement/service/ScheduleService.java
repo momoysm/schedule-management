@@ -27,4 +27,13 @@ public class ScheduleService {
 
         return scheduleResponseDto;
     }
+
+    public ScheduleResponseDto getSchedule(Long scheduleId) {
+
+        Schedule schedule = scheduleRepository.findById(scheduleId).get();
+
+        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
+
+        return scheduleResponseDto;
+    }
 }
