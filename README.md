@@ -20,7 +20,7 @@
 
 4.API 명세서
 
-https://documenter.getpostman.com/view/34877953/2sA3JRZzK2
+[https://documenter.getpostman.com/view/34877953/2sA3JRZzK2](https://web.postman.co/workspace/My-Workspace~773bd856-4a7c-4834-84a9-33ff686308a7/documentation/34877953-5d2c7949-3d2f-48f8-839c-057a35476fa1)
 
 http://localhost:8080/swagger-ui/index.html
  - swagger를 활용한 api명세서
