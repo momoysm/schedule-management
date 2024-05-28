@@ -16,7 +16,8 @@
 
 3.ERD Diagram
 
-![schedule-management](https://github.com/momoysm/schedule-management/assets/90163578/e1dc9431-0c02-4e8a-8553-073200466e6a)
+<img width="956" alt="스크린샷 2024-05-29 오전 12 20 27" src="https://github.com/momoysm/schedule-management/assets/90163578/7224535c-5c14-48d4-88d2-7c940379c412">
+
 
 4.API 명세서
 
