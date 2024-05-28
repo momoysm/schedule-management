@@ -16,12 +16,14 @@ public class CommentResponseDto {
     private String comment;
     private String userId;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getCommentId();
         this.comment = comment.getComment();
         this.userId = comment.getUserId();
         this.createdAt = comment.getCreatedAt();
+        this.updatedAt = comment.getUpdatedAt();
     }
 
 }

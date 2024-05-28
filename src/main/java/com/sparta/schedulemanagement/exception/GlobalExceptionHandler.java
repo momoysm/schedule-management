@@ -33,6 +33,20 @@ public class GlobalExceptionHandler {
         return responseEntity;
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ExceptionDto> handleException(NullPointerException exception){
+
+        String message = exception.getMessage();
+
+        ExceptionDto exceptionDto = new ExceptionDto(message);
+
+        ResponseEntity<ExceptionDto> responseEntity = ResponseEntity.badRequest().body(exceptionDto);
+
+        logger.error(exception.getMessage());
+
+        return responseEntity;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionDto> handleException(MethodArgumentNotValidException exception){
 
