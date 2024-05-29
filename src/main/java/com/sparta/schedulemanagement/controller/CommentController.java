@@ -5,6 +5,7 @@ import com.sparta.schedulemanagement.dto.CommentResponseDto;
 import com.sparta.schedulemanagement.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +23,11 @@ public class CommentController {
     @PutMapping("/comment/{commentId}")
     public CommentResponseDto updateComment(@PathVariable Long scheduleId, @PathVariable Long commentId, @RequestBody @Valid CommentRequestDto requestDto) {
         return commentService.updateComment(scheduleId, commentId, requestDto);
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long scheduleId, @PathVariable Long commentId, @RequestParam String userId) {
+        return commentService.deleteComment(scheduleId, commentId, userId);
     }
 
 }

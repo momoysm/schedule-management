@@ -1,6 +1,7 @@
 package com.sparta.schedulemanagement.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SchedulePasswordRequestDto {
 
-    @NotBlank
+    @NotNull
     private Long id;
 
     @NotBlank

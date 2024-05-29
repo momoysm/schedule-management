@@ -4,22 +4,14 @@ import com.sparta.schedulemanagement.dto.SchedulePasswordRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.entity.Schedule;
+import com.sparta.schedulemanagement.exception.NotFoundException;
 import com.sparta.schedulemanagement.repository.ScheduleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -68,7 +60,7 @@ public class ScheduleService {
 
             return scheduleId;
         }else{
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new NotFoundException("비밀번호가 일치하지 않습니다.");
         }
     }
 
@@ -82,13 +74,13 @@ public class ScheduleService {
 
             return schedulePasswordRequestDto.getId();
         }else{
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new NotFoundException("비밀번호가 일치하지 않습니다.");
         }
 
     }
 
     public Schedule findScheduleById(Long scheduleId){
-        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("찾으시는 일정은 존재하지 않습니다."));
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new NotFoundException("찾으시는 일정은 존재하지 않습니다."));
     }
 
 }
