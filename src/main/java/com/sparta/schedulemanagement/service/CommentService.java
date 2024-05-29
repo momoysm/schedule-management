@@ -5,6 +5,7 @@ import com.sparta.schedulemanagement.dto.CommentResponseDto;
 import com.sparta.schedulemanagement.entity.Comment;
 import com.sparta.schedulemanagement.entity.Schedule;
 import com.sparta.schedulemanagement.exception.NotFoundException;
+import com.sparta.schedulemanagement.jwt.JwtUtil;
 import com.sparta.schedulemanagement.repository.CommentRepository;
 import com.sparta.schedulemanagement.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,12 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
+    private final JwtUtil jwtUtil;
 
-    public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto) {
+    @Transactional
+    public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto, String tokenValue) {
+
+        jwtValid(tokenValue);
 
         Schedule schedule = existSchedule(scheduleId);
 
@@ -32,7 +37,9 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long scheduleId, Long commentId, CommentRequestDto requestDto) {
+    public CommentResponseDto updateComment(Long scheduleId, Long commentId, CommentRequestDto requestDto, String tokenValue) {
+
+        jwtValid(tokenValue);
 
         Schedule schedule = existSchedule(scheduleId);
 
@@ -43,7 +50,9 @@ public class CommentService {
     }
 
     @Transactional
-    public ResponseEntity<String> deleteComment(Long scheduleId, Long commentId, String userId) {
+    public ResponseEntity<String> deleteComment(Long scheduleId, Long commentId, String userId, String tokenValue) {
+
+        jwtValid(tokenValue);
 
         Schedule schedule = existSchedule(scheduleId);
 
@@ -72,6 +81,16 @@ public class CommentService {
             }
         }else{
             throw new NotFoundException("선택한 일정에 해당 댓글이 존재하지 않습니다.");
+        }
+    }
+
+    public void jwtValid(String tokenValue){
+        // JWT 토큰 substring
+        String token = jwtUtil.substringToken(tokenValue);
+
+        // 토큰 검증
+        if(!jwtUtil.validateToken(token)){
+            throw new IllegalArgumentException("Token Error");
         }
     }
 

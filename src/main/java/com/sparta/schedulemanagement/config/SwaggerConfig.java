@@ -1,4 +1,4 @@
-package com.sparta.schedulemanagement.configuration;
+package com.sparta.schedulemanagement.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
