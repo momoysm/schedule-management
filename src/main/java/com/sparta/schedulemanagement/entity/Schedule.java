@@ -32,6 +32,10 @@ public class Schedule extends Timestamped{
     @Column(name="password", nullable = false)
     private String password;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @OneToMany(mappedBy = "schedule")
     private List<Comment> commentList = new ArrayList<>();
 

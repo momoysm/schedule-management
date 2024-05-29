@@ -20,8 +20,9 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
@@ -29,13 +30,11 @@ public class Comment extends Timestamped {
 
     public Comment(CommentRequestDto requestDto, Schedule schedule){
         this.content = requestDto.getContent();
-        this.userId = requestDto.getUserId();
         this.schedule = schedule;
     }
 
     public void update(CommentRequestDto requestDto){
         this.content = requestDto.getContent();
-        this.userId = requestDto.getUserId();
     }
 
 }
