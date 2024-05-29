@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/comment")
+@RequestMapping("/api/schedule/{scheduleId}")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/createComment/{scheduleId}")
+    @PostMapping("/comment")
     public CommentResponseDto createComment(@PathVariable Long scheduleId, @RequestBody @Valid CommentRequestDto requestDto) {
         return commentService.createComment(scheduleId, requestDto);
     }
 
-    @PutMapping("/updateComment/{scheduleId}/{commentId}")
+    @PutMapping("/comment/{commentId}")
     public CommentResponseDto updateComment(@PathVariable Long scheduleId, @PathVariable Long commentId, @RequestBody @Valid CommentRequestDto requestDto) {
         return commentService.updateComment(scheduleId, commentId, requestDto);
     }

@@ -18,16 +18,16 @@ public class Schedule extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long scheduleId;
+    private Long id;
 
-    @Column(name="scheduleTitle", nullable = false)
-    private String scheduleTitle;
+    @Column(name="title", nullable = false)
+    private String title;
 
-    @Column(name = "scheduleContent")
-    private String scheduleContent;
+    @Column(name = "content")
+    private String content;
 
-    @Column(name="scheduleManager", nullable = false)
-    private String scheduleManager;
+    @Column(name="manager", nullable = false)
+    private String manager;
 
     @Column(name="password", nullable = false)
     private String password;
@@ -36,16 +36,16 @@ public class Schedule extends Timestamped{
     private List<Comment> commentList = new ArrayList<>();
 
     public Schedule(ScheduleRequestDto scheduleRequestDto){
-        this.scheduleTitle = scheduleRequestDto.getScheduleTitle();
-        this.scheduleContent = scheduleRequestDto.getScheduleContent();
-        this.scheduleManager = scheduleRequestDto.getScheduleManager();
+        this.title = scheduleRequestDto.getTitle();
+        this.content = scheduleRequestDto.getContent();
+        this.manager = scheduleRequestDto.getManager();
         this.password = scheduleRequestDto.getPassword();
     }
 
     public void update(ScheduleRequestDto scheduleRequestDto){
-        this.scheduleTitle = scheduleRequestDto.getScheduleTitle();
-        this.scheduleContent = scheduleRequestDto.getScheduleContent();
-        this.scheduleManager = scheduleRequestDto.getScheduleManager();
+        this.title = scheduleRequestDto.getTitle();
+        this.content = scheduleRequestDto.getContent();
+        this.manager = scheduleRequestDto.getManager();
         this.password = scheduleRequestDto.getPassword();
     }
 

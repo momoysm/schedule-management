@@ -9,16 +9,16 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "Comment")
+@Table(name = "comment")
 @NoArgsConstructor
 public class Comment extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Long id;
 
     @Column(nullable = false)
-    private String comment;
+    private String content;
 
     @Column(nullable = false)
     private String userId;
@@ -28,13 +28,13 @@ public class Comment extends Timestamped {
     private Schedule schedule;
 
     public Comment(CommentRequestDto requestDto, Schedule schedule){
-        this.comment = requestDto.getComment();
+        this.content = requestDto.getContent();
         this.userId = requestDto.getUserId();
         this.schedule = schedule;
     }
 
     public void update(CommentRequestDto requestDto){
-        this.comment = requestDto.getComment();
+        this.content = requestDto.getContent();
         this.userId = requestDto.getUserId();
     }
 

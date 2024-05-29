@@ -12,14 +12,14 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class ScheduleRequestDto {
 
-    private String scheduleContent;
+    private String content;
 
     @NotBlank
     @Length(max = 200, message = "200자 이내여야 합니다.")
-    private String scheduleTitle;
+    private String title;
 
     @Email(message = "Email형식에 맞지 않습니다.")
-    private String scheduleManager;
+    private String manager;
 
     @NotBlank
     private String password;
