@@ -6,9 +6,7 @@ import com.sparta.schedulemanagement.entity.Comment;
 import com.sparta.schedulemanagement.entity.Schedule;
 import com.sparta.schedulemanagement.entity.User;
 import com.sparta.schedulemanagement.exception.NotFoundException;
-import com.sparta.schedulemanagement.jwt.JwtUtil;
 import com.sparta.schedulemanagement.repository.CommentRepository;
-import com.sparta.schedulemanagement.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleService scheduleService;
-    private final ScheduleRepository scheduleRepository;
 
     @Transactional
     public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto, User user) {

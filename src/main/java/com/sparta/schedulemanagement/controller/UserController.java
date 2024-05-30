@@ -1,17 +1,15 @@
 package com.sparta.schedulemanagement.controller;
 
-import com.sparta.schedulemanagement.dto.LoginRequestDto;
 import com.sparta.schedulemanagement.dto.SignupRequestDto;
+import com.sparta.schedulemanagement.jwt.JwtUtil;
 import com.sparta.schedulemanagement.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -25,6 +23,12 @@ public class UserController {
     public ResponseEntity<String> signUp(@RequestBody @Valid SignupRequestDto requestDto) {
 
         return userService.signup(requestDto);
+    }
+
+    @GetMapping("/token/reissue")
+    public ResponseEntity<String> reissueToken(HttpServletRequest request, HttpServletResponse response) {
+
+        return userService.reissueToken(request, response);
     }
 
 }

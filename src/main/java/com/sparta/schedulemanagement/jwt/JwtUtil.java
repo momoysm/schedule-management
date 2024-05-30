@@ -4,17 +4,13 @@ import com.sparta.schedulemanagement.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -22,13 +18,12 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     // Header KEY 값
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_ACCESS_HEADER = "Authorization_Access";
+    public static final String AUTHORIZATION_REFRESH_HEADER = "Authorization_Refresh";
     // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
-    // 토큰 만료시간
-    private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
@@ -44,24 +39,53 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    // 토큰 생성
-    public String createToken(String username, UserRoleEnum role) {
+    // Access 토큰 생성
+    public String createAccessToken(String username, UserRoleEnum role) {
         Date date = new Date();
+
+        // 60분 토큰 만료시간
+        long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
                         .claim(AUTHORIZATION_KEY, role) // 사용자 권한
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
+                        .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                         .compact();
     }
 
-    // header 에서 JWT 가져오기
-    public String getJwtFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+    // Refresh 토근 생성
+    public String createRefreshToken(String username, UserRoleEnum role) {
+        Date date = new Date();
+
+        //하루 토큰 만료시간
+        long REFRESH_TOKEN_TIME = 60 * 60 * 60 * 1000L;
+
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(username) // 사용자 식별자값(ID)
+                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한
+                        .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))// 만료시간 하루
+                        .setIssuedAt(date) // 발급일
+                        .signWith(key, signatureAlgorithm) // 암호화 알고리즘
+                        .compact();
+    }
+
+    // header 에서 AccessToken 가져오기
+    public String getAccessTokenFromHeader(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_ACCESS_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    // header 에서 refreshToken 가져오기
+    public String getRefreshTokenFromHeader(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_REFRESH_HEADER);
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)){
             return bearerToken.substring(7);
         }
         return null;
