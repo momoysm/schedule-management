@@ -28,9 +28,10 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public Comment(CommentRequestDto requestDto, Schedule schedule){
+    public Comment(CommentRequestDto requestDto, Schedule schedule, User user){
         this.content = requestDto.getContent();
         this.schedule = schedule;
+        this.user = user;
     }
 
     public void update(CommentRequestDto requestDto){

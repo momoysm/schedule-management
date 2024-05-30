@@ -4,6 +4,7 @@ import com.sparta.schedulemanagement.dto.CommentRequestDto;
 import com.sparta.schedulemanagement.dto.CommentResponseDto;
 import com.sparta.schedulemanagement.entity.Comment;
 import com.sparta.schedulemanagement.entity.Schedule;
+import com.sparta.schedulemanagement.entity.User;
 import com.sparta.schedulemanagement.exception.NotFoundException;
 import com.sparta.schedulemanagement.jwt.JwtUtil;
 import com.sparta.schedulemanagement.repository.CommentRepository;
@@ -21,76 +22,52 @@ import java.util.Optional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final ScheduleService scheduleService;
     private final ScheduleRepository scheduleRepository;
-    private final JwtUtil jwtUtil;
 
     @Transactional
-    public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto, String tokenValue) {
+    public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto, User user) {
 
-        jwtValid(tokenValue);
+        Schedule schedule = scheduleService.findScheduleByIdAndUser(scheduleId, user);
 
-        Schedule schedule = existSchedule(scheduleId);
-
-        Comment comment = commentRepository.save(new Comment(requestDto, schedule));
+        Comment comment = commentRepository.save(new Comment(requestDto, schedule, user));
 
         return new CommentResponseDto(comment);
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long scheduleId, Long commentId, CommentRequestDto requestDto, String tokenValue) {
+    public CommentResponseDto updateComment(Long scheduleId, Long commentId, CommentRequestDto requestDto, User user) {
 
-        jwtValid(tokenValue);
+        Schedule schedule = scheduleService.findScheduleByIdAndUser(scheduleId, user);
 
-        Schedule schedule = existSchedule(scheduleId);
-
-        Comment comment = existComment(schedule, commentId, requestDto.getUserId());
+        Comment comment = existComment(schedule, commentId, user); // 존재하는 댓글인지 확인
         comment.update(requestDto);
 
         return new CommentResponseDto(comment);
     }
 
     @Transactional
-    public ResponseEntity<String> deleteComment(Long scheduleId, Long commentId, String userId, String tokenValue) {
+    public ResponseEntity<String> deleteComment(Long scheduleId, Long commentId, User user) {
 
-        jwtValid(tokenValue);
+        Schedule schedule = scheduleService.findScheduleByIdAndUser(scheduleId, user);
 
-        Schedule schedule = existSchedule(scheduleId);
-
-        Comment comment = existComment(schedule, commentId, userId);
+        Comment comment = existComment(schedule, commentId, user);
         commentRepository.delete(comment);
 
         return new ResponseEntity<>("삭제 성공!, HttpStatus코드 : " +  HttpStatus.OK, HttpStatus.OK);
     }
 
-    public Schedule existSchedule(Long scheduleId) {
-
-        return scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new NotFoundException("선택한 일정이 존재하지 않습니다.")
-        );
-    }
-
-    public Comment existComment(Schedule schedule, Long commentId, String userId) {
-
-        Optional<Comment> optionalComment = commentRepository.findByIdAndSchedule(commentId, schedule);
+    public Comment existComment(Schedule schedule, Long commentId, User user) {
+        Optional<Comment> optionalComment = commentRepository.findByIdAndUserAndSchedule(commentId, user, schedule);
 
         if(optionalComment.isPresent()){
-            if (userId.equals(optionalComment.get().getUserId())){
+            if (user.getId().equals(optionalComment.get().getUser().getId())){
                 return optionalComment.get();
             } else {
               throw new NotFoundException("사용자가 일치하지 않습니다.");
             }
         }else{
             throw new NotFoundException("선택한 일정에 해당 댓글이 존재하지 않습니다.");
-        }
-    }
-
-    public void jwtValid(String tokenValue){
-        // JWT 토큰 substring
-        String token = jwtUtil.substringToken(tokenValue);
-
-        // 토큰 검증
-        if(!jwtUtil.validateToken(token)){
-            throw new IllegalArgumentException("Token Error");
         }
     }
 

@@ -3,9 +3,12 @@ package com.sparta.schedulemanagement.service;
 import com.sparta.schedulemanagement.dto.SchedulePasswordRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
+import com.sparta.schedulemanagement.entity.Comment;
 import com.sparta.schedulemanagement.entity.Schedule;
+import com.sparta.schedulemanagement.entity.User;
 import com.sparta.schedulemanagement.exception.NotFoundException;
 import com.sparta.schedulemanagement.repository.ScheduleRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,46 +17,40 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    @Autowired
-    public ScheduleService(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
-
     @Transactional
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
 
-        Schedule schedule = new Schedule(scheduleRequestDto);
-
-        Schedule savedSchedule = scheduleRepository.save(schedule);
-
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(savedSchedule);
-
-        return scheduleResponseDto;
-    }
-
-    public ScheduleResponseDto getSchedule(Long scheduleId) {
-
-        Schedule schedule = findScheduleById(scheduleId);
+        Schedule schedule = scheduleRepository.save(new Schedule(scheduleRequestDto, user));
 
         ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
 
         return scheduleResponseDto;
     }
 
-    public List<ScheduleResponseDto> getAllSchedule() {
+    public ScheduleResponseDto getSchedule(Long scheduleId, User user) {
 
-        return scheduleRepository.findAllByOrderByCreatedAtDesc().stream().map(ScheduleResponseDto::new).toList();
+        Schedule schedule = findScheduleByIdAndUser(scheduleId, user); // 해당 일정이 존재하는지 확인
+
+        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
+
+        return scheduleResponseDto;
+    }
+
+    public List<ScheduleResponseDto> getAllSchedule(User user) {
+
+        return scheduleRepository.findByUserOrderByCreatedAtDesc(user).stream().map(ScheduleResponseDto::new).toList();
     }
 
     @Transactional
-    public Long updateSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto) {
+    public Long updateSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto, User user) {
 
-        Schedule schedule = findScheduleById(scheduleId);
+        Schedule schedule = findScheduleByIdAndUser(scheduleId, user);
 
         if(scheduleRequestDto.getPassword().equals(schedule.getPassword())) {
             schedule.update(scheduleRequestDto);
@@ -65,9 +62,9 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Long deleteSchedule(SchedulePasswordRequestDto schedulePasswordRequestDto) {
+    public Long deleteSchedule(SchedulePasswordRequestDto schedulePasswordRequestDto, User user) {
 
-        Schedule schedule = findScheduleById(schedulePasswordRequestDto.getId());
+        Schedule schedule = findScheduleByIdAndUser(schedulePasswordRequestDto.getId(), user);
 
         if(schedulePasswordRequestDto.getPassword().equals(schedule.getPassword())){
             scheduleRepository.delete(schedule);
@@ -79,8 +76,12 @@ public class ScheduleService {
 
     }
 
-    public Schedule findScheduleById(Long scheduleId){
-        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new NotFoundException("찾으시는 일정은 존재하지 않습니다."));
+    // scheduleId와 user에 해당하는 schedule조회
+    public Schedule findScheduleByIdAndUser(Long scheduleId, User user){
+
+        return scheduleRepository.findByIdAndUser(scheduleId, user).orElseThrow(
+                () -> new NotFoundException("찾으시는 일정은 존재하지 않습니다.")
+        );
     }
 
 }

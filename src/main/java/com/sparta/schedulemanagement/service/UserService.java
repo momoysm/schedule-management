@@ -7,6 +7,7 @@ import com.sparta.schedulemanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,12 +17,14 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public ResponseEntity<String> signup(SignupRequestDto requestDto) {
 
         String username = requestDto.getUsername();
+        String password = passwordEncoder.encode(requestDto.getPassword());
 
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
@@ -37,7 +40,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(requestDto, role);
+        User user = new User(requestDto.getNickname(), username, password, role);
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.OK).body("회원가입이 완료됐습니다.");

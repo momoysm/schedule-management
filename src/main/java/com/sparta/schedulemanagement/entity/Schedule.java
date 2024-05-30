@@ -39,11 +39,12 @@ public class Schedule extends Timestamped{
     @OneToMany(mappedBy = "schedule")
     private List<Comment> commentList = new ArrayList<>();
 
-    public Schedule(ScheduleRequestDto scheduleRequestDto){
+    public Schedule(ScheduleRequestDto scheduleRequestDto, User user){
         this.title = scheduleRequestDto.getTitle();
         this.content = scheduleRequestDto.getContent();
         this.manager = scheduleRequestDto.getManager();
         this.password = scheduleRequestDto.getPassword();
+        this.user = user;
     }
 
     public void update(ScheduleRequestDto scheduleRequestDto){

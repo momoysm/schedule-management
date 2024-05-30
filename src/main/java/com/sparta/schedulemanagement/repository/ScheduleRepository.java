@@ -1,13 +1,17 @@
 package com.sparta.schedulemanagement.repository;
 
 import com.sparta.schedulemanagement.entity.Schedule;
+import com.sparta.schedulemanagement.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    //LocalDateTime으로 정렬하려면 findAll 뒤에 By를 먼저 붙여주면 해결
-    List<Schedule> findAllByOrderByCreatedAtDesc();
+    Optional<Schedule> findByIdAndUser(Long scheduleId, User user);
+
+    List<Schedule> findByUserOrderByCreatedAtDesc(User user);
 }
