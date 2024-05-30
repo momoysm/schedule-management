@@ -1,7 +1,6 @@
 package com.sparta.schedulemanagement.controller;
 
 import com.sparta.schedulemanagement.dto.SignupRequestDto;
-import com.sparta.schedulemanagement.jwt.JwtUtil;
 import com.sparta.schedulemanagement.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -2,10 +2,8 @@ package com.sparta.schedulemanagement.controller;
 
 import com.sparta.schedulemanagement.dto.CommentRequestDto;
 import com.sparta.schedulemanagement.dto.CommentResponseDto;
-import com.sparta.schedulemanagement.jwt.JwtUtil;
 import com.sparta.schedulemanagement.security.UserDetailsImpl;
 import com.sparta.schedulemanagement.service.CommentService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
