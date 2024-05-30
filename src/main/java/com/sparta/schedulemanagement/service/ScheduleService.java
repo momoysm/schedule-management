@@ -26,18 +26,14 @@ public class ScheduleService {
 
         Schedule schedule = scheduleRepository.save(new Schedule(scheduleRequestDto, user));
 
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
-
-        return scheduleResponseDto;
+        return new ScheduleResponseDto(schedule);
     }
 
     public ScheduleResponseDto getSchedule(Long scheduleId, User user) {
 
         Schedule schedule = findScheduleByIdAndUser(scheduleId, user); // 해당 일정이 존재하는지 확인
 
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
-
-        return scheduleResponseDto;
+        return new ScheduleResponseDto(schedule);
     }
 
     public List<ScheduleResponseDto> getAllSchedule(User user) {
@@ -49,29 +45,18 @@ public class ScheduleService {
     public Long updateSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto, User user) {
 
         Schedule schedule = findScheduleByIdAndUser(scheduleId, user);
+        schedule.update(scheduleRequestDto);
 
-        if(scheduleRequestDto.getPassword().equals(schedule.getPassword())) {
-            schedule.update(scheduleRequestDto);
-
-            return scheduleId;
-        }else{
-            throw new NotFoundException("비밀번호가 일치하지 않습니다.");
-        }
+        return scheduleId;
     }
 
     @Transactional
     public Long deleteSchedule(SchedulePasswordRequestDto schedulePasswordRequestDto, User user) {
 
         Schedule schedule = findScheduleByIdAndUser(schedulePasswordRequestDto.getId(), user);
+        scheduleRepository.delete(schedule);
 
-        if(schedulePasswordRequestDto.getPassword().equals(schedule.getPassword())){
-            scheduleRepository.delete(schedule);
-
-            return schedulePasswordRequestDto.getId();
-        }else{
-            throw new NotFoundException("비밀번호가 일치하지 않습니다.");
-        }
-
+        return schedulePasswordRequestDto.getId();
     }
 
     // scheduleId와 user에 해당하는 schedule조회
@@ -82,4 +67,10 @@ public class ScheduleService {
         );
     }
 
+    // comment에서 일정 확인 메서드
+    public Schedule findScheduleById(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new NotFoundException("찾으시는 일정이 존재하지 않습니다.")
+        );
+    }
 }

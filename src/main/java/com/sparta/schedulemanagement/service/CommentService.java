@@ -25,7 +25,7 @@ public class CommentService {
     @Transactional
     public CommentResponseDto createComment(Long scheduleId, CommentRequestDto requestDto, User user) {
 
-        Schedule schedule = scheduleService.findScheduleByIdAndUser(scheduleId, user);
+        Schedule schedule = scheduleService.findScheduleById(scheduleId);
 
         Comment comment = commentRepository.save(new Comment(requestDto, schedule, user));
 
@@ -35,7 +35,7 @@ public class CommentService {
     @Transactional
     public CommentResponseDto updateComment(Long scheduleId, Long commentId, CommentRequestDto requestDto, User user) {
 
-        Schedule schedule = scheduleService.findScheduleByIdAndUser(scheduleId, user);
+        Schedule schedule = scheduleService.findScheduleById(scheduleId);
 
         Comment comment = existComment(schedule, commentId, user); // 존재하는 댓글인지 확인
         comment.update(requestDto);
@@ -46,7 +46,7 @@ public class CommentService {
     @Transactional
     public ResponseEntity<String> deleteComment(Long scheduleId, Long commentId, User user) {
 
-        Schedule schedule = scheduleService.findScheduleByIdAndUser(scheduleId, user);
+        Schedule schedule = scheduleService.findScheduleById(scheduleId);
 
         Comment comment = existComment(schedule, commentId, user);
         commentRepository.delete(comment);
