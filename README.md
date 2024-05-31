@@ -1,28 +1,19 @@
 1.일정 관리 프로그램
- - 일정을 등록, 조회, 수정, 삭제하는 단순 CRUD 기능.
 
-사용 기술 및 개발 환경 : JAVA, Spring Boot, Gradle, MySQL, IntelliJ
+ - 회원가입 로그인 기능.
+ - 일정을 등록, 조회, 수정, 삭제하는 기능.
+ - 일정에 댓글을 등록, 수정, 삭제하는 기능.
 
-2.Usecase Diagram
+사용 기술 및 개발 환경 : JAVA, Spring Boot, Gradle, MySQL, IntelliJ, JWT, Spring Security, Swagger
 
-![스크린샷 2024-05-16 오후 8 58 59](https://github.com/momoysm/schedule-management/assets/90163578/b0729b79-4cf6-4b33-85a1-611d36e8428c)
+2.ERD Diagram
 
- - 일정 등록
- - 전체 일정 조회
- - 상세 일정 조회
- - 일정 수정
- - 일정 삭제
+<img width="965" alt="스크린샷 2024-05-31 오전 11 33 45" src="https://github.com/momoysm/schedule-management/assets/90163578/123831c8-8811-4205-8813-8eeb771ebd01">
 
-
-3.ERD Diagram
-
-<img width="956" alt="스크린샷 2024-05-29 오전 12 20 27" src="https://github.com/momoysm/schedule-management/assets/90163578/7224535c-5c14-48d4-88d2-7c940379c412">
-
-
-4.API 명세서
+3.API 명세서
 
 https://documenter.getpostman.com/view/34877953/2sA3JRZzK2
 
-5.프로젝트를 진행하며 고민한 Technical Issue
+4.프로젝트를 진행하며 고민한 Technical Issue
  - 예외처리 : @ExceptionHandler를 활용하여 공통 예외 처리를 구현
-   
+ - 파일 업로드 기능 : 경로가 아닌 파일을 직접 DB에 업로드하는 부분이 처음 접해보고 예시도 적어서 어려웠다.
