@@ -4,12 +4,14 @@ import com.sparta.schedulemanagement.dto.SchedulePasswordRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
 import com.sparta.schedulemanagement.security.UserDetailsImpl;
+import com.sparta.schedulemanagement.service.FileService;
 import com.sparta.schedulemanagement.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,10 +24,11 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping("/schedule")
-    public ScheduleResponseDto createSchedule(@RequestBody @Valid ScheduleRequestDto scheduleRequestDto,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ScheduleResponseDto createSchedule(@RequestPart("dto") @Valid ScheduleRequestDto scheduleRequestDto,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                              @RequestPart("file") MultipartFile file){
 
-        return scheduleService.createSchedule(scheduleRequestDto, userDetails.getUser());
+        return scheduleService.createSchedule(scheduleRequestDto, userDetails.getUser(), file);
     }
 
     @GetMapping("/schedule")
@@ -40,9 +43,10 @@ public class ScheduleController {
 
     @PutMapping("/schedule/{scheduleId}")
     public Long updateSchedule(@PathVariable Long scheduleId,
-                               @RequestBody @Valid ScheduleRequestDto scheduleRequestDto,
-                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return scheduleService.updateSchedule(scheduleId, scheduleRequestDto, userDetails.getUser());
+                               @RequestPart("dto") @Valid ScheduleRequestDto scheduleRequestDto,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails,
+                               @RequestPart("file") MultipartFile file){
+        return scheduleService.updateSchedule(scheduleId, scheduleRequestDto, userDetails.getUser(), file);
     }
 
     @DeleteMapping("/schedule")

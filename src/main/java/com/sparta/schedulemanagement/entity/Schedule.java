@@ -26,12 +26,6 @@ public class Schedule extends Timestamped{
     @Column(name = "content")
     private String content;
 
-    @Column(name="manager", nullable = false)
-    private String manager;
-
-    @Column(name="password", nullable = false)
-    private String password;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -39,24 +33,20 @@ public class Schedule extends Timestamped{
     @OneToMany(mappedBy = "schedule")
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     public Schedule(ScheduleRequestDto scheduleRequestDto, User user){
         this.title = scheduleRequestDto.getTitle();
         this.content = scheduleRequestDto.getContent();
-        this.manager = scheduleRequestDto.getManager();
-        this.password = scheduleRequestDto.getPassword();
         this.user = user;
     }
 
-    public void update(ScheduleRequestDto scheduleRequestDto){
+    public void update(ScheduleRequestDto scheduleRequestDto, Image image){
         this.title = scheduleRequestDto.getTitle();
         this.content = scheduleRequestDto.getContent();
-        this.manager = scheduleRequestDto.getManager();
-        this.password = scheduleRequestDto.getPassword();
-    }
-
-    public void addCommentList(Comment comment){
-        this.commentList.add(comment);
-        comment.setSchedule(this);
+        this.image = image;
     }
 
 }

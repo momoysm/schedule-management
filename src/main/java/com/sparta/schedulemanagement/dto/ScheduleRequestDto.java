@@ -18,10 +18,4 @@ public class ScheduleRequestDto {
     @Length(max = 200, message = "200자 이내여야 합니다.")
     private String title;
 
-    @Email(message = "Email형식에 맞지 않습니다.")
-    private String manager;
-
-    @NotBlank
-    private String password;
-
 }

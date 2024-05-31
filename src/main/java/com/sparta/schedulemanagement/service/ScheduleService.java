@@ -3,6 +3,7 @@ package com.sparta.schedulemanagement.service;
 import com.sparta.schedulemanagement.dto.SchedulePasswordRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleRequestDto;
 import com.sparta.schedulemanagement.dto.ScheduleResponseDto;
+import com.sparta.schedulemanagement.entity.Image;
 import com.sparta.schedulemanagement.entity.Schedule;
 import com.sparta.schedulemanagement.entity.User;
 import com.sparta.schedulemanagement.exception.NotFoundException;
@@ -11,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -19,12 +22,22 @@ import java.util.List;
 @Service
 public class ScheduleService {
 
+    private final FileService fileService;
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto, User user, MultipartFile file) {
 
         Schedule schedule = scheduleRepository.save(new Schedule(scheduleRequestDto, user));
+
+        if(file != null){
+            try {
+                Image image = fileService.uploadFile(file, schedule);
+                schedule.setImage(image);
+            } catch (IOException e) {
+                throw new RuntimeException("파일 업로드 실패");
+            }
+        }
 
         return new ScheduleResponseDto(schedule);
     }
@@ -42,10 +55,20 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Long updateSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto, User user) {
+    public Long updateSchedule(Long scheduleId, ScheduleRequestDto scheduleRequestDto, User user, MultipartFile file) {
 
         Schedule schedule = findScheduleByIdAndUser(scheduleId, user);
-        schedule.update(scheduleRequestDto);
+        Image image = schedule.getImage();
+
+        if(file != null){
+            try {
+                image = fileService.uploadFile(file, schedule);
+            } catch (IOException e) {
+                throw new RuntimeException("업로드 실패");
+            }
+        }
+
+        schedule.update(scheduleRequestDto, image);
 
         return scheduleId;
     }
