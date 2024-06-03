@@ -1,6 +1,6 @@
 package com.sparta.schedulemanagement.jwt;
 
-import com.sparta.schedulemanagement.entity.UserRoleEnum;
+import com.sparta.schedulemanagement.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

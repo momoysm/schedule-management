@@ -1,6 +1,6 @@
 package com.sparta.schedulemanagement.exception;
 
-import com.sparta.schedulemanagement.dto.ExceptionDto;
+import com.sparta.schedulemanagement.exception.dto.ExceptionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +30,22 @@ public class GlobalExceptionHandler {
         return responseEntity;
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ExceptionDto> handleException(RuntimeException exception){
+    @ExceptionHandler(UploadFailException.class)
+    public ResponseEntity<ExceptionDto> handleException(UploadFailException exception){
+
+        String message = exception.getMessage();
+
+        ExceptionDto exceptionDto = new ExceptionDto(message);
+
+        ResponseEntity<ExceptionDto> responseEntity = ResponseEntity.badRequest().body(exceptionDto);
+
+        logger.error(exception.getMessage());
+
+        return responseEntity;
+    }
+
+    @ExceptionHandler(LoginFailException.class)
+    public ResponseEntity<ExceptionDto> handleException(LoginFailException exception){
 
         String message = exception.getMessage();
 

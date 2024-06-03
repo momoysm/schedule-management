@@ -1,8 +1,9 @@
 package com.sparta.schedulemanagement.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.schedulemanagement.dto.LoginRequestDto;
-import com.sparta.schedulemanagement.entity.UserRoleEnum;
+import com.sparta.schedulemanagement.user.dto.LoginRequestDto;
+import com.sparta.schedulemanagement.user.entity.UserRoleEnum;
+import com.sparta.schedulemanagement.exception.LoginFailException;
 import com.sparta.schedulemanagement.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             );
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new LoginFailException("로그인 실패");
         }
     }
 
